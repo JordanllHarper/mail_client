@@ -5,4 +5,6 @@ pub enum ApiError {
     AuthenticationFailed,
     #[error("User not found")]
     UserNotFound,
+    #[error("Connection timed out")]
+    ConnectionTimeout,
 }
