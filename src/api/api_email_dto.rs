@@ -1,5 +1,5 @@
 #[derive(Debug, serde::Serialize, serde::Deserialize)]
-pub struct ApiEmailMessage {
+pub struct GmailApiEmailMessage {
     pub id: String,
     pub thread_id: String,
     pub label_ids: Vec<String>,
