@@ -10,4 +10,8 @@ pub enum EmailError {
     TransportError {
         e: <SmtpTransport as Transport>::Error,
     },
+    #[error("Parse error")]
+    ParseError(String),
+    #[error("Parse error")]
+    SendError,
 }

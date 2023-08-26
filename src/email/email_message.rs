@@ -1,17 +1,17 @@
 pub enum Header {
-    Subject(String),
-    ContentType(String),
-    From(String),
-    To(String),
-    ReturnPath(String),
-    MessageId(String),
+    ContentType(ContentType),
+}
+
+pub enum ContentType {
+    TextPlain,
+    TextHtml,
 }
 
 pub struct EmailMessage {
     pub from: String,
     pub to: String,
     pub subject: String,
-    pub headers: Vec<Header>,
+    pub content_type: ContentType,
     pub body: MessageBody,
 }
 
