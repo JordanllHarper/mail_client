@@ -14,3 +14,4 @@ color-eyre = "0.6.2"
 thiserror = "1.0"
 tokio = { version = "1", features = ["full"] }
 async-trait = "0.1.73"
+ratatui = { version = "0.22.0", features = ["all-widgets"] }
