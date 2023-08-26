@@ -1,5 +1,4 @@
-pub mod api;
-pub mod models;
+pub mod email;
 use color_eyre::Result;
 
 fn main() -> Result<()> {
