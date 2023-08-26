@@ -1,5 +1,3 @@
-//TODO: Change to results for success and failure
-
 use async_trait::async_trait;
 
 use super::api_email_dto::GmailApiEmailMessage;
