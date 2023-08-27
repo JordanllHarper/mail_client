@@ -9,7 +9,7 @@ use super::{
     errors::EmailError,
     traits::email_sender::EmailSender,
     user_credentials::UserCredentials,
-    util::{handle_content_type, parse_attr},
+    util::mapping_to_extern_crates::{handle_content_type, parse_attr},
 };
 
 pub struct GetEmailRequest {
@@ -47,8 +47,8 @@ impl super::traits::email_receiver::EmailReceiver for EmailClient {
             email_request.upper_bound,
         );
         let messages = imap_session.fetch(email_fetch_string, "ALL")?;
-        
-        messages.iter().map(|f| f.header())
+
+        messages.iter().map(|f| f.header());
 
         //TODO: Implement parsing headers and bodies and creating email message from that
 
@@ -64,10 +64,10 @@ impl EmailSender for EmailClient {
         credentials: UserCredentials,
     ) -> Result<(), EmailError> {
         let m = if let Ok(m) = Message::builder()
-            .from(parse_attr(&email.addresses.from)?)
-            .to(parse_attr(&email.addresses.to)?)
+            .from(parse_attr(&email.headers.addresses.from)?)
+            .to(parse_attr(&email.headers.addresses.to)?)
             .subject(email.headers.subject)
-            .header(handle_content_type(&email.headers.content_type))
+            .header(handle_content_type(email.headers.content_type))
             .body(email.body.data)
         {
             m
