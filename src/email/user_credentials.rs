@@ -5,7 +5,7 @@ pub struct UserCredentials {
     pub secret: String,
 }
 impl UserCredentials {
-    pub fn to_lettre_creds(&self) -> Credentials {
+    pub fn to_lettre_creds(self) -> Credentials {
         Credentials::new(self.authentication_identity, self.secret)
     }
 }

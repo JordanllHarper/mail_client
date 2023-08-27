@@ -14,4 +14,7 @@ pub enum EmailError {
     ParseError(String),
     #[error("Parse error")]
     SendError,
+
+    #[error("Attribute error")]
+    AttributeError,
 }

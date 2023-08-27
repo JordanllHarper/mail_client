@@ -1,27 +1,25 @@
 use async_trait::async_trait;
-use lettre::{
-    message::{header::ContentType, Mailbox},
-    transport::smtp::authentication::Credentials,
-    Message, SmtpTransport, Transport,
-};
+use lettre::{message::Mailbox, Message, SmtpTransport, Transport};
 
-use super::{
-    email_message::EmailMessage,
-    errors::EmailError,
-    user_credentials::{self, UserCredentials},
-};
+use super::{email_message::EmailMessage, errors::EmailError, user_credentials::UserCredentials};
 pub fn parse_attr(attr: &String) -> Result<Mailbox, EmailError> {
     let attr_from: Mailbox = match attr.parse() {
         Ok(v) => v,
-        Err(_) => return Err(EmailError::ParseError("Error parsing".to_string())),
+        Err(_) => return Err(EmailError::ParseError(format!("Error parsing {attr}"))),
     };
     Ok(attr_from)
 }
 
-fn handle_content_type(f: &super::email_message::ContentType) -> ContentType {
+fn handle_content_type(
+    f: &super::email_message::ContentType,
+) -> lettre::message::header::ContentType {
     match f {
-        super::email_message::ContentType::TextPlain => ContentType::TEXT_PLAIN,
-        super::email_message::ContentType::TextHtml => ContentType::TEXT_HTML,
+        super::email_message::ContentType::TextPlain => {
+            lettre::message::header::ContentType::TEXT_PLAIN
+        }
+        super::email_message::ContentType::TextHtml => {
+            lettre::message::header::ContentType::TEXT_HTML
+        }
     }
 }
 //Email client to handle email operations
@@ -51,13 +49,16 @@ impl EmailClient for EmailClientLettreImpl {
         domain: String,
         credentials: UserCredentials,
     ) -> Result<(), EmailError> {
-        let m = Message::builder()
+        let m = match Message::builder()
             .from(parse_attr(&email.from)?)
             .to(parse_attr(&email.to)?)
             .subject(email.subject)
             .header(handle_content_type(&email.content_type))
             .body(email.body.data)
-            .unwrap();
+        {
+            Ok(m) => m,
+            Err(_) => return Err(EmailError::AttributeError),
+        };
 
         let mailer = match SmtpTransport::relay(&domain) {
             Ok(r) => r,
