@@ -47,6 +47,8 @@ impl super::traits::email_receiver::EmailReceiver for EmailClient {
             email_request.upper_bound,
         );
         let messages = imap_session.fetch(email_fetch_string, "ALL")?;
+        
+        messages.iter().map(|f| f.header())
 
         //TODO: Implement parsing headers and bodies and creating email message from that
 
