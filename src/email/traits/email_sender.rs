@@ -1,4 +1,8 @@
-use super::email_message::EmailMessage;
+use async_trait::async_trait;
+
+use crate::email::{
+    email_message::EmailMessage, errors::EmailError, user_credentials::UserCredentials,
+};
 
 #[async_trait]
 pub trait EmailSender {
