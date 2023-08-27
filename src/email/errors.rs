@@ -12,6 +12,9 @@ pub enum EmailError {
     },
     #[error("Parse error")]
     ParseError(String),
+
+    #[error("Parse header error")]
+    ParseHeaderError,
     #[error("Parse error")]
     SendError,
 
