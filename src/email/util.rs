@@ -1,7 +1,7 @@
 use lettre::message::Mailbox;
 
 use super::{
-    email_message::{EmailMessage, Headers},
+    email_message::{Headers, MessageBody},
     errors::EmailError,
 };
 
@@ -35,6 +35,12 @@ pub fn gen_csv_from_lower(lower_bound: i32, upper_bound: i32) -> String {
     returned_string
 }
 
-pub fn parse_headers() -> Headers {}
+pub fn parse_headers(m: &[u8]) -> Headers {
+    let string = String::from_utf8(m.to_vec());
 
-pub fn parse_body() {}
+    todo!()
+}
+
+pub fn parse_body() -> MessageBody {
+    todo!()
+}

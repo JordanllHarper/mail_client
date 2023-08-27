@@ -1,11 +1,8 @@
-use async_trait::async_trait;
 use eyre::Result;
 use lettre::{Message, SmtpTransport, Transport};
 
 extern crate imap;
 extern crate native_tls;
-
-use crate::email::util::{parse_body, parse_headers};
 
 use super::{
     email_message::EmailMessage,
