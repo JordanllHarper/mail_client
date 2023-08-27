@@ -1,3 +1,4 @@
+extern crate native_tls;
 pub mod email;
 use color_eyre::Result;
 

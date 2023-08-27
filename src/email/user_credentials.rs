@@ -1,6 +1,8 @@
 use lettre::transport::smtp::authentication::Credentials;
 
 pub struct UserCredentials {
+    pub email: String,
+    pub password: String,
     pub authentication_identity: String,
     pub secret: String,
 }
