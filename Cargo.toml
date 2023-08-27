@@ -16,3 +16,6 @@ tokio = { version = "1", features = ["full"] }
 async-trait = "0.1.73"
 ratatui = { version = "0.22.0", features = ["all-widgets"] }
 lettre = "0.10"
+imap = "2.4.1"
+native-tls = "0.2.11"
+eyre = "0.6.8"

@@ -1,5 +1,5 @@
-pub mod api;
-pub mod models;
+extern crate native_tls;
+pub mod email;
 use color_eyre::Result;
 
 fn main() -> Result<()> {

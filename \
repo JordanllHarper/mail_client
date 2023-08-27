@@ -1,0 +1,58 @@
+use std::str::FromStr;
+
+use async_trait::async_trait;
+use lettre::{
+    message::{header::ContentType, Mailbox, MessageBuilder},
+    transport::smtp::authentication::Credentials,
+    Message, SmtpTransport, Transport,
+};
+
+use super::{email_message::EmailMessage, errors::EmailError};
+
+//Email client to handle email operations
+#[async_trait]
+pub trait EmailClient {
+    fn get_emails(&self) -> Result<Vec<EmailMessage>, EmailError>;
+    fn send_email(&self, email: EmailMessage) -> Result<(), EmailError>;
+    fn delete_email(&self, email: EmailMessage) -> Result<(), EmailError>;
+    fn archive_email(&self, email: EmailMessage) -> Result<(), EmailError>;
+}
+
+pub trait EmailParse {
+    fn parse_attr(attr: String) -> Result<Mailbox, EmailError>;
+}
+
+pub struct EmailClientLettreImpl {
+    builder: MessageBuilder,
+    creds: Credentials,
+    mailer: SmtpTransport,
+}
+impl EmailParse for dyn EmailClient {
+    fn parse_attr(attr: String) -> Result<Mailbox, EmailError> {
+        let attr_from: Mailbox = match attr.parse() {
+            Ok(v) => v,
+            Err(_) => return Err(EmailError::ParseError("Error parsing".to_string())),
+        };
+        Ok(attr_from)
+    }
+}
+
+impl EmailClient for EmailClientLettreImpl {
+    fn get_emails(&self) -> Result<Vec<EmailMessage>, EmailError> {
+        todo!()
+    }
+
+    fn send_email(&self, email: EmailMessage) -> Result<(), EmailError> {
+       let lettre_from = parse_attr() 
+
+        Ok(())
+    }
+
+    fn delete_email(&self, email: EmailMessage) -> Result<(), EmailError> {
+        todo!()
+    }
+
+    fn archive_email(&self, email: EmailMessage) -> Result<(), EmailError> {
+        todo!()
+    }
+}
