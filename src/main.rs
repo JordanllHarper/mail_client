@@ -15,14 +15,24 @@ use crossterm::{
 };
 use eyre::Context;
 use ratatui::{prelude::CrosstermBackend, Terminal};
+use state::app_state::{self, HomeFocusedUiState, UiState};
+use testing::home_screen_state_test::{self, provide_test_state};
 use ui::home_screen::home_screen;
+pub mod testing;
+
+enum TestingFlag {
+    None,
+    HomeTest,
+    LoadingTest,
+}
 
 fn main() -> Result<()> {
     color_eyre::install()?;
 
     let mut terminal = setup_terminal()?;
 
-    run(&mut terminal)?;
+    //TODO: Remove flag when in prod
+    run(&mut terminal, TestingFlag::HomeTest)?;
 
     restore_terminal(&mut terminal)?;
 
@@ -52,9 +62,16 @@ fn restore_terminal(terminal: &mut Terminal<CrosstermBackend<Stdout>>) -> Result
 /// state. This example exits when the user presses 'q'. Other styles of application loops are
 /// possible, for example, you could have multiple application states and switch between them based
 /// on events, or you could have a single application state and update it based on events.
-fn run(terminal: &mut Terminal<CrosstermBackend<Stdout>>) -> Result<()> {
+fn run(terminal: &mut Terminal<CrosstermBackend<Stdout>>, testing: TestingFlag) -> Result<()> {
+    let mut state = UiState::Loading;
+    match testing {
+        TestingFlag::None => state = UiState::Loading,
+        TestingFlag::HomeTest => state = provide_test_state(),
+        TestingFlag::LoadingTest => todo!(),
+    }
+
     loop {
-        terminal.draw(crate::render_app)?;
+        terminal.draw(|f| crate::render_app(f, &state))?;
         if should_quit()? {
             break;
         }
@@ -64,8 +81,28 @@ fn run(terminal: &mut Terminal<CrosstermBackend<Stdout>>) -> Result<()> {
 
 /// Render the application. This is where you would draw the application UI. This example just
 /// draws a greeting.
-fn render_app(frame: &mut ratatui::Frame<CrosstermBackend<Stdout>>) {
-    home_screen(frame);
+fn render_app(frame: &mut ratatui::Frame<CrosstermBackend<Stdout>>, app_state: &UiState) {
+    match app_state {
+        UiState::Setup {
+            has_existing_account: _,
+        } => todo!(),
+        UiState::Home {
+            email_in_focus,
+            emails_from_selected_account,
+            selected_account,
+            focus_state,
+            available_accounts,
+        } => home_screen(
+            frame,
+            email_in_focus,
+            emails_from_selected_account,
+            selected_account,
+            available_accounts,
+            focus_state,
+        ),
+        UiState::Loading => todo!(),
+        UiState::SendEmail { state, address } => todo!(),
+    }
 }
 
 /// Check if the user has pressed 'q'. This is where you would handle events. This example just

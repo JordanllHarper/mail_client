@@ -21,8 +21,8 @@ pub struct GetEmailRequest {
 }
 
 pub struct EmailClient {}
-
 impl super::traits::email_receiver::EmailReceiver for EmailClient {
+    ///Get emails via a tls and imap implementation.
     fn get_emails(&self, email_request: GetEmailRequest) -> Result<Option<Vec<EmailMessage>>> {
         let tls = native_tls::TlsConnector::builder()
             .build()
