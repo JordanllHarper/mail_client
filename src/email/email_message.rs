@@ -4,7 +4,7 @@ pub struct Addresses {
 }
 
 pub struct Headers {
-    pub headers: String,
+    pub addresses: Addresses,
     pub subject: String,
     pub content_type: ContentType,
 }
@@ -14,7 +14,6 @@ pub enum ContentType {
 }
 
 pub struct EmailMessage {
-    pub addresses: Addresses,
     pub headers: Headers,
     pub body: MessageBody,
 }
