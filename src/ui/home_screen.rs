@@ -1,13 +1,13 @@
 use std::rc::Rc;
 
-use ratatui::Frame;
+use ratatui::{layout, Frame};
 
 use ratatui::layout::Direction;
 use ratatui::prelude::{Backend, Constraint, Rect};
 use ratatui::widgets::{Block, Borders};
 
-pub fn home_screen<B: ratatui::backend::Backend>(frame: &mut Frame<B>) {
-    let layout = ratatui::layout::Layout::default()
+pub fn home_screen<'a, B: ratatui::backend::Backend>(frame: &'a mut Frame<B>) {
+    let layout: Rc<[Rect]> = ratatui::layout::Layout::default()
         .direction(Direction::Horizontal)
         .constraints(
             [
@@ -19,24 +19,24 @@ pub fn home_screen<B: ratatui::backend::Backend>(frame: &mut Frame<B>) {
         )
         .split(frame.size());
 
-    account_pane(&layout, frame);
-    email_list_pane(&layout, frame);
-    email_preview_pane(&layout, frame);
+    let account_pane = account_list_pane();
+    frame.render_widget(account_pane, layout[0]);
+    let email_list_pane = email_list_pane();
+    frame.render_widget(email_list_pane, layout[1]);
+    let email_pane_preview = email_preview_pane();
+    frame.render_widget(email_pane_preview, layout[2]);
 }
 
-fn account_pane<B: Backend>(layout: &Rc<[Rect]>, frame: &mut Frame<B>) {
-    let block = Block::default().borders(Borders::ALL).title("Accounts");
-
-    frame.render_widget(block, layout[0]);
+//account list component
+fn account_list_pane<'a>() -> Block<'a> {
+    Block::default().borders(Borders::ALL).title("Accounts")
 }
 
-fn email_list_pane<B: Backend>(layout: &Rc<[Rect]>, frame: &mut Frame<B>) {
-    let block = Block::default().borders(Borders::ALL).title("Emails");
-
-    frame.render_widget(block, layout[1]);
+//email list component
+fn email_list_pane<'a>() -> Block<'a> {
+    Block::default().borders(Borders::ALL).title("Emails")
 }
-fn email_preview_pane<B: Backend>(layout: &Rc<[Rect]>, frame: &mut Frame<B>) {
-    let block = Block::default().borders(Borders::ALL).title("Preview");
-
-    frame.render_widget(block, layout[2]);
+//email preview component
+fn email_preview_pane<'a>() -> Block<'a> {
+    Block::default().borders(Borders::ALL).title("Preview")
 }

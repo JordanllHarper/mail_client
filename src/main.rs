@@ -14,8 +14,8 @@ use crossterm::{
     terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
 };
 use eyre::Context;
-use ratatui::{prelude::CrosstermBackend, widgets::Paragraph, *};
-use ui::home_screen::{self, home_screen};
+use ratatui::{prelude::CrosstermBackend, Terminal};
+use ui::home_screen::home_screen;
 
 fn main() -> Result<()> {
     color_eyre::install()?;
