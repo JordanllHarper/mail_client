@@ -15,11 +15,14 @@ use crossterm::{
 };
 use eyre::Context;
 use ratatui::{prelude::CrosstermBackend, widgets::Paragraph, *};
+use ui::home_screen::{self, home_screen};
 
 fn main() -> Result<()> {
     color_eyre::install()?;
 
     let mut terminal = setup_terminal()?;
+
+    run(&mut terminal)?;
 
     restore_terminal(&mut terminal)?;
 
@@ -62,8 +65,7 @@ fn run(terminal: &mut Terminal<CrosstermBackend<Stdout>>) -> Result<()> {
 /// Render the application. This is where you would draw the application UI. This example just
 /// draws a greeting.
 fn render_app(frame: &mut ratatui::Frame<CrosstermBackend<Stdout>>) {
-    let greeting = Paragraph::new("Hello World! (press 'q' to quit)");
-    frame.render_widget(greeting, frame.size());
+    home_screen(frame);
 }
 
 /// Check if the user has pressed 'q'. This is where you would handle events. This example just
